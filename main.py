@@ -98,7 +98,8 @@ def get_songs_by_artist(token, artist_id):
     headers = get_auth_header(token)
     result = get(url, headers=headers)
     json_result = json.loads(result.content)["tracks"]
-    print(f"{json_result[0]['artists']} this prints artist info in list format")
+    print(f"{json_result[0]['artists'][0]['name']} this prints first artist with this name")
+    print(f"{json_result[1]['artists'][0]['name']} this prints second artist with this name")
     # print(json_result[1])
     print(f"{json_result} this is json_result")
     return json_result
@@ -149,6 +150,7 @@ for idx, song in enumerate(songs):
 
 #####################################################
 ##                  CLEAN UP CODE                  ##
+##                  ADD DOCSTRINGS                 ##
 #####################################################
 
 
