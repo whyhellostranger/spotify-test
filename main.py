@@ -1,10 +1,8 @@
 
-
 # search for artist
 # find artist
 # get artist id, 
 # get tracks associated
-
 
 from dotenv import load_dotenv
 # easily load env files and 
@@ -53,13 +51,11 @@ def get_auth_header(token):
     # shortcut for the headers thing i think
 
 
-
-
 def search_for_artist(token, artist_name):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
     #construct query (q)
-    query = f"?q={artist_name}&type=artist&limit=1"
+    query = f"?q={artist_name}&type=artist&limit=5"
     # text value searching for after q=
     # after &type, if artist or track, &type = artist,track
     # limit = 1 means first result that pops up
@@ -75,32 +71,49 @@ def search_for_artist(token, artist_name):
     if len(json_result) == 0:
         print("No artist with this name exists :(")
         return None
+    elif len(json_result) > 1:
+        print(f"There are {len(json_result)} results: ")
+
     print(json_result[0])
+    
+    #print(artist_list)
+
+
     return(json_result[0])
     
     # if limit greater than 1 probably return a list and let users scroll through
+
+# def get_artist_list(token, artist_name):
+
+
+    
+# artist_list = search_for_artist(token, result)
+# for idx, artist in enumerate(artist_list):
+#     print(f"{idx + 1}. {json_result['artists']}")
+
+
 
 def get_songs_by_artist(token, artist_id):
     url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks?country=US"
     headers = get_auth_header(token)
     result = get(url, headers=headers)
     json_result = json.loads(result.content)["tracks"]
+    print(f"{json_result[0]['artists']} this prints artist info in list format")
+    # print(json_result[1])
+    print(f"{json_result} this is json_result")
     return json_result
-
 
 
 token = get_token()
 # print(token)
 
-artist_input = input("Which artist do you want to search for?\n")
+artist_input = input("Which artist do you want to search for?\n >> ")
 
 result = search_for_artist(token, artist_input)
 # print(result["name"])
 
 artist_id = result["id"]
-intro_sentence = f"{result['name']}\'s genre: {result['genres']}"
-
-
+# intro_sentence = f"{result['name']}\'s genre: {result['genres']}"
 
 
 def get_genre(result):
@@ -126,9 +139,6 @@ for chara in genre_bit:
     acc_intro_sentence += cleanWord(chara)
 
 print(acc_intro_sentence)
-
-
-
 
 songs = get_songs_by_artist(token, artist_id)
 
